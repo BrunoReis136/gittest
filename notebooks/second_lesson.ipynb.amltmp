@@ -1,0 +1,70 @@
+{
+  "cells": [
+    {
+      "cell_type": "code",
+      "source": [
+        "from azureml.core import Dataset\n",
+        "from azureml.core import Workspace\n",
+        "\n",
+        "import pandas as pd\n",
+        "from io import StringIO\n",
+        "\n",
+        "# Conecta ao Azure ML Workspace\n",
+        "workspace = Workspace.from_config()\n",
+        "\n",
+        "# Registra um dataset\n",
+        "datastore = workspace.get_default_datastore()\n",
+        "\n",
+        "# Cria um dataset demonstrativo\n",
+        "data = \"\"\"Age,income,target\n",
+        "25,50000,0\n",
+        "30,60000,1\n",
+        "35,55000,0\n",
+        "40,65000,1\"\"\"\n",
+        "\n",
+        "dataset_file = StringIO(data)\n",
+        "\n",
+        "# Salvar o dataset localmente e subir para o datastore(armazenamento de dados)\n",
+        "df = pd.read_csv(dataset_file)\n",
+        "df.to_csv(\"training_data.csv\",index=False)\n",
+        "\n",
+        "datastore.upload_files(\n",
+        "    [\"training_data.csv\"],\n",
+        "    target_path=\"data/\",\n",
+        "    overwrite=True\n",
+        ")\n",
+        "\n",
+        "dataset = Dataset.Tabular.from_delimited_files(path=(datastore, 'data/training_data.csv'))\n",
+        "dataset = dataset.register(workspace=workspace, name='training_dataset', create_new_version=True)\n",
+        "print(\"Dataset registered successfully.\")"
+      ],
+      "outputs": [],
+      "execution_count": null,
+      "metadata": {}
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3.10 - SDK v2",
+      "language": "python",
+      "name": "python310-sdkv2"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.10.6"
+    },
+    "nteract": {
+      "version": "nteract-front-end@1.0.0"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 2
+}
