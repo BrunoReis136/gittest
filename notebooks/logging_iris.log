@@ -1,0 +1,13 @@
+2025-07-15 18:51:08,881 - INFO - Configuração dos registros realizada. Iniciando os registros..
+2025-07-15 18:51:11,046 - INFO - NumExpr defaulting to 4 threads.
+2025-07-15 18:51:15,070 - INFO - Carregando dataset iris...
+2025-07-15 18:51:15,114 - INFO - Dataset iris carregado com sucesso!
+2025-07-15 18:51:15,114 - INFO - Começando pré processamento...
+2025-07-15 18:51:15,115 - INFO - Conferidos valores ausentes no dataset. Nenhum encontrado no dataset Iris.
+2025-07-15 18:51:15,115 - INFO - Pre processamento de dados completo.
+2025-07-15 18:51:15,895 - INFO - Começando treino do modelo...
+2025-07-15 18:51:15,902 - INFO - Treino realizado com sucesso.
+2025-07-15 18:51:15,907 - INFO - Precisão do treino: 1.00
+2025-07-15 18:51:15,912 - INFO - Começando previsões do modelo...
+2025-07-15 18:51:15,913 - INFO - Previsões feitas com sucesso.
+2025-07-15 18:51:15,913 - INFO - Amostras de previsões:[1 0 2 1 1]

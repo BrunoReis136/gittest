@@ -12,7 +12,7 @@
         "# Conecta ao Azure ML Workspace\n",
         "workspace = Workspace.from_config()\n",
         "\n",
-        "# Registra um dataset\n",
+        "# Define um local de armazenamento \n",
         "datastore = workspace.get_default_datastore()\n",
         "\n",
         "# Cria um dataset demonstrativo\n",
@@ -41,6 +41,11 @@
       "outputs": [
         {
           "output_type": "stream",
+          "name": "stderr",
+          "text": "\"datastore.upload_files\" is deprecated after version 1.0.69. Please use \"FileDatasetFactory.upload_directory\" instead. See Dataset API change notice at https://aka.ms/dataset-deprecation.\n"
+        },
+        {
+          "output_type": "stream",
           "name": "stdout",
           "text": "Uploading an estimated of 1 files\nUploading training_data.csv\nUploaded training_data.csv, 1 files out of an estimated total of 1\nUploaded 1 files\nDataset registered successfully.\n"
         }
@@ -48,7 +53,7 @@
       "execution_count": 1,
       "metadata": {
         "gather": {
-          "logged": 1752352929682
+          "logged": 1752368294490
         }
       }
     },
@@ -65,7 +70,7 @@
         "env = Environment(name='custom_environment')\n",
         "dependencies = CondaDependencies.create(\n",
         "    conda_packages = ['scikit-learn','pandas','numpy','joblib'],\n",
-        "    pip_packages = ['azume-sdk'] # Adiciona um pip se necessário\n",
+        "    pip_packages = ['azureml-sdk'] # Adiciona um pip se necessário\n",
         "    )\n",
         "env.python.conda_dependencies = dependencies\n",
         "\n",
@@ -74,13 +79,13 @@
         "print(\"Enviroment registered successfully\")\n",
         "\n",
         "# Define a instância computacional\n",
-        "compute_target = ComputeTarget(workspace=workspace, name='D4S-V3-2024-10-30-a')\n",
+        "compute_target = ComputeTarget(workspace=workspace, name='train-cluster')\n",
         "\n",
         "# Define treinamento, script e configuração\n",
         "# Especifica diretório contendo o script de treinamento e instância em que será treinado\n",
         "# O objeto ScriptRunConfig é usado pra encapsular as configurações de treinamento, incluindo argumentos de script\n",
         "src=ScriptRunConfig(\n",
-        "    source_directory='scripts',\n",
+        "    source_directory='.',\n",
         "    script='2_lesson_train.py',\n",
         "    compute_target=compute_target,\n",
         "    arguments=['--input_data', dataset.as_named_input('training_data')],\n",
@@ -95,6 +100,28 @@
         "run = experiment.submit(config=src) # Submete a execução do experimento no computador alvo especificado\n",
         "run.wait_for_completion(show_output=True) # Espera a conclusão do treinamento para mostrar a saída"
       ],
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": "WARNING:root:You might see network latency and increased data transfer costs if you chose a cluster in a location different from the location of your workspace\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "RunId: training_experiment_1752368294_ebdeaadc\nWeb View: https://ml.azure.com/runs/training_experiment_1752368294_ebdeaadc?wsid=/subscriptions/4630e05e-ec4c-4dee-bc01-bdb40067df0e/resourcegroups/bruhreis136-rg/workspaces/modulo1&tid=c8b61e8d-069e-4975-b112-adab88d33beb\n"
+        }
+      ],
+      "execution_count": null,
+      "metadata": {
+        "gather": {
+          "logged": 1752368435338
+        }
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [],
       "outputs": [],
       "execution_count": null,
       "metadata": {}

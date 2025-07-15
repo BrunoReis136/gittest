@@ -1,0 +1,15 @@
+2025-07-14 01:36:43,226 - INFO - Logging setup complete.
+2025-07-14 01:36:43,226 - INFO - Carregando o dataset
+2025-07-14 01:36:43,260 - INFO - Found the config file in: /config.json
+2025-07-14 01:36:47,541 - INFO - Dataset carretgado com sucesso
+2025-07-14 01:36:47,542 - INFO - Começão do pré processamento dos dados
+2025-07-14 01:36:47,551 - INFO - Dados completos
+2025-07-14 01:36:47,715 - INFO - Dataset dividido com sucesso para treino e teste.
+2025-07-14 01:36:47,715 - INFO - Preprocessamento concluído
+2025-07-14 01:36:48,262 - INFO - Iniciando o treinamento do modelo...
+2025-07-14 01:37:13,316 - INFO - Modelo treinado com sucesso.
+2025-07-14 01:37:13,392 - INFO - Precisão de treinamento: 1.00
+2025-07-14 01:37:13,398 - INFO - Começando as previsões do modelo.
+2025-07-14 01:37:13,410 - INFO - Previsões realizadas com sucesso.
+2025-07-14 01:37:13,410 - INFO - Saída das previsões:[0 0 0 0 0]
+2025-07-14 01:37:13,416 - INFO - Sucesso na validação de dados.

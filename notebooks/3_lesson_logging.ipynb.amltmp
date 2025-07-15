@@ -1,0 +1,168 @@
+{
+  "cells": [
+    {
+      "cell_type": "code",
+      "source": [
+        "import logging\n",
+        "from azureml.core import Workspace, Dataset\n",
+        "import pandas as pd\n",
+        "from sklearn.model_selection import train_test_split\n",
+        "from logging.handlers import RotatingFileHandler\n",
+        "\n",
+        "\n",
+        "\n",
+        "# Configura registro em um arquivo\n",
+        "\n",
+        "logging.basicConfig(\n",
+        "    filename=\"ml_pipeline.log\",\n",
+        "    filemode=\"w\",\n",
+        "    level=logging.INFO,\n",
+        "    format=\"%(asctime)s - %(levelname)s - %(message)s\"\n",
+        ")\n",
+        "\n",
+        "# Exemplo de mensagem registro\n",
+        "logging.info(\"Logging setup complete.\")\n",
+        "\n",
+        "\n",
+        "# Logging (registro) de início de carregamento de dados\n",
+        "logging.info(\"Carregando o dataset\")\n",
+        "\n",
+        "\n",
+        "# Logging de carregamento do Dataset em Dataframe Pandas\n",
+        "ws = Workspace.from_config()\n",
+        "dataset = Dataset.get_by_name(ws,'credit_card_fraud')\n",
+        "df = dataset.to_pandas_dataframe()\n",
+        "logging.info(\"Dataset carretgado com sucesso\")\n",
+        "\n",
+        "# Logging de início do preprocessamento\n",
+        "logging.info(\"Começão do pré processamento dos dados\")\n",
+        "\n",
+        "# Limpando dados\n",
+        "df.fillna(0,inplace=True)\n",
+        "logging.info(\"Dados completos\")\n",
+        "\n",
+        "# Dividindo dataset em dados de treino de teste\n",
+        "X = df.drop('Class',axis=1)\n",
+        "y = df['Class']\n",
+        "X_train, X_test, y_train, y_test = train_test_split(X,y,train_size=0.8)\n",
+        "logging.info(\"Dataset dividido com sucesso para treino e teste.\")\n",
+        "\n",
+        "# Registro da conclusão\n",
+        "logging.info(\"Preprocessamento concluído\")\n"
+      ],
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "{'infer_column_types': 'False', 'activity': 'to_pandas_dataframe'}\n{'infer_column_types': 'False', 'activity': 'to_pandas_dataframe', 'activityApp': 'TabularDataset'}\n"
+        }
+      ],
+      "execution_count": 1,
+      "metadata": {
+        "gather": {
+          "logged": 1752457007754
+        }
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.tree import DecisionTreeClassifier\n",
+        "\n",
+        "# Registro de inicio de treinamento\n",
+        "logging.info(\"Iniciando o treinamento do modelo...\")\n",
+        "\n",
+        "try:\n",
+        "    model = DecisionTreeClassifier()\n",
+        "    model.fit(X_train, y_train)\n",
+        "    logging.info(\"Modelo treinado com sucesso.\")\n",
+        "except Exception as e:\n",
+        "    logging.error(f\"Erro durante o treinamento do model: {e}\")\n",
+        "\n",
+        "# Exemplo de registro de precisão (accuracy) do modelo, se aplicável\n",
+        "accuracy = model.score(X_train, y_train)\n",
+        "logging.info(f\"Precisão de treinamento: {accuracy:.2f}\")\n"
+      ],
+      "outputs": [],
+      "execution_count": 2,
+      "metadata": {
+        "gather": {
+          "logged": 1752457033291
+        }
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Registro do início das previsões\n",
+        "logging.info(\"Começando as previsões do modelo.\")\n",
+        "\n",
+        "try:\n",
+        "    # Realiza as previsões\n",
+        "    predictions = model.predict(X_test)\n",
+        "    logging.info(\"Previsões realizadas com sucesso.\")\n",
+        "except Exception as e:\n",
+        "    logging.error(\"Falha ao realizar previsões: {e}\")\n",
+        "\n",
+        "# Registro de saída das previsões do modelo\n",
+        "logging.info(f\"Saída das previsões:{predictions[:5]}\") # Registra as 5 primeiras previsões"
+      ],
+      "outputs": [],
+      "execution_count": 3,
+      "metadata": {
+        "gather": {
+          "logged": 1752457033373
+        }
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Exemplo de registro de uma excessão em uma validação de dados\n",
+        "def validate_data(data):\n",
+        "    try:\n",
+        "        if not isinstance(data, pd.DataFrame):\n",
+        "            raise ValueError(\"Dados precisam ser um Dataframe Pandas\")\n",
+        "        logging.info(\"Sucesso na validação de dados.\")\n",
+        "    except ValueError as e:\n",
+        "        logging.error(f\"Erro na validação de dados: {e}\")\n",
+        "\n",
+        "validate_data(df)"
+      ],
+      "outputs": [],
+      "execution_count": 4,
+      "metadata": {
+        "gather": {
+          "logged": 1752457033455
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python38-azureml",
+      "language": "python",
+      "display_name": "Python 3.10 - AzureML"
+    },
+    "language_info": {
+      "name": "python",
+      "version": "3.10.11",
+      "mimetype": "text/x-python",
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "pygments_lexer": "ipython3",
+      "nbconvert_exporter": "python",
+      "file_extension": ".py"
+    },
+    "kernel_info": {
+      "name": "python38-azureml"
+    },
+    "nteract": {
+      "version": "nteract-front-end@1.0.0"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 2
+}
